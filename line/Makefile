@@ -2,7 +2,7 @@
 # Makfile
 #
 
-CC= arm-linux-gcc
+CC= arm-linux-gnueabi-gcc
 
 OBJS= main.o uart_api.o robot_protocol.o keyboard.o
 
