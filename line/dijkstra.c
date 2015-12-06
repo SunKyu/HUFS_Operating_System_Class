@@ -4,6 +4,8 @@
 // 1 is visited vertex  so 0 is in the set Q
 //int map[14][14] = {0,};
 void init_map(){
+    int i = 0;
+    int j = 0;
     map[0][1] = 10;
     map[1][2] = 10;
     map[2][3] = 33;
@@ -21,8 +23,8 @@ void init_map(){
     map[11][12] = 49;
     map [12][13] = 33;
 
-    for( int i = 0; i <14 ; i++){
-        for (int j = 0; j<14 ; j++){
+    for(  i = 0; i <14 ; i++){
+        for ( j = 0; j<14 ; j++){
             if(map[i][j]!=0){
                 map[j][i] = map [i][j];
             }
@@ -40,17 +42,20 @@ void Dijkstra(int source){ // source is start node
     int Q[14] = {0, }; //that has the least dist[u] value
     int flag  = 0; //check Q's state (empty or not)
     int u = source;
+    int i = 0;
+    int j = 0;
+    int v = 0;
     /*
      *intializeing for dikstra
      */
-    for(int i = 0; i<14; i++){
+    for( i = 0; i<14; i++){
         dist[i] = 999;
     }
     dist[source] = 0;
     //main loop
     while(!flag){//check Q is empty(flag = 0 is not empty)
         int count = 0;
-        for ( int i = 0 ; i<14; i++){
+        for (  i = 0 ; i<14; i++){
             if (Q[i] == 1)
                 count ++;
         }
@@ -67,8 +72,8 @@ void Dijkstra(int source){ // source is start node
         else{ //find the min node in Q set
             int min = 999;
             int index;
-            for( int i = 0; i <14; i++){
-                for (int j = 0; j<14 ; j++){
+            for(  i = 0; i <14; i++){
+                for ( j = 0; j<14 ; j++){
                     if(map[i][j]<min && Q[i] ==0){
                         min = map[i][j];
                         index = i;
@@ -78,7 +83,7 @@ void Dijkstra(int source){ // source is start node
             u = index;
             Q[u] = 1; //remove u from set Q
         }
-        for (int v = 0; v<14; v++){
+        for ( v = 0; v<14; v++){
             int alt = 0;
              if(map[u][v] != 999 && Q[v] == 0){
                 alt = dist[u] + map[u][v];

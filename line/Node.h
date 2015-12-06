@@ -8,8 +8,8 @@
 struct Node{
     int id;
     int dir[4];//0, 1, 2, 3 -> up, down, left, right vertex
-}
+};
 struct Node node_arr[14];
-(struct Node) * node_init();
+void node_init();
 
 #endif

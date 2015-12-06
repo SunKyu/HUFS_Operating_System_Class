@@ -1,8 +1,9 @@
 #include "Node.h"
 //up, down, left, right
-(struct Node) * node_init(){
-    for (int i = 0; i< 14; i++){
-        node_arr[i] = i;
+void node_init(){
+    int i  =0 ;
+    for (i = 0; i< 14; i++){
+        node_arr[i].id  =i ;
     }
     node_arr[0].dir[0] = 1;
     node_arr[0].dir[1] = 0;
@@ -73,8 +74,6 @@
     node_arr[13].dir[1] = 12;
     node_arr[13].dir[2] = 0;
     node_arr[13].dir[3] = 8;
-
-	return node_arr;
 }
 
 

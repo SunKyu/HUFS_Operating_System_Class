@@ -33,6 +33,13 @@ int stack_pop (struct stack* s){
     }
     return s->arr[(s->top)--];
 }
+int stack_top (struct stack* s){
+    if(stack_is_empty(s) == 1){
+        printf("Error, stack is empty\n");
+        return -1;
+    }
+    return s->arr[s->top];
+}
 
 void stack_make_empty(struct stack *s){
     s->top = -1;
@@ -41,7 +48,8 @@ void stack_make_empty(struct stack *s){
 
 void stack_print(struct stack *s){
     int index = s->top;
-    for (int i = 0; i<index ; i++){
+    int i = 0;
+    for (i = 0; i<index ; i++){
         printf("%d - ", s->arr[i]);
     }
 }
