@@ -1,10 +1,8 @@
-#include <stdio.h>
-#include "stack.h"
-
-int prev[14]  ={0,};//previous of each node
+#include "dijkstra.h"
+//int prev[14]  ={0,};//previous of each node
 // 0 is unvisited vertex
 // 1 is visited vertex  so 0 is in the set Q
-int map[14][14] = {0,};
+//int map[14][14] = {0,};
 void init_map(){
     map[0][1] = 10;
     map[1][2] = 10;
@@ -93,7 +91,24 @@ void Dijkstra(int source){ // source is start node
     }
 }
 
+struct stack dijkstra_run(int start){
+    struct stack s;
+    stack_init(&s);
+    init_map();
+    Dijkstra(start);
+    int end = 13;
+    stack_push(&s, end);
+    //find path
+    while(end != 0){
+        stack_push(&s, prev[end]);
+        end = prev[end];
+    }
+    stack_push(&s, prev[end]);
+    stack_print(&s);
+    return s;
+}
 
+/*
 int main(int argc, char * argv[]){
     struct stack s;
     stack_init(&s);
@@ -109,6 +124,4 @@ int main(int argc, char * argv[]){
     stack_push(&s, prev[end]);
     stack_print(&s);
 }
-
-
-
+*/
