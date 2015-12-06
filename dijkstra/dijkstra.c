@@ -1,0 +1,108 @@
+#include <stdio.h>
+
+int dist[14] = {0, };//distance 
+int prev[14]  ={0,};//previous of each node
+int Q[14] = {0, }; //that has the least dist[u] value
+// 0 is unvisited vertex
+// 1 is visited vertex  so 0 is in the set Q
+int map[14][14] = {0,};
+void init_map(){
+    map[0][1] = 10;
+    map[1][2] = 10;
+    map[2][3] = 33;
+    map[2][5] = 33;
+    map[3][4] = 50;
+    map[4][7] = 33;
+    map[5][6] = 50;
+    map[6][7] = 33;
+    map[6][8] = 33;
+    map[6][12] = 50;
+    map[7][9] = 25;
+    map[8][13] = 50;
+    map[9][10] = 16;
+    map[10][11] = 25;
+    map[11][12] = 49;
+    map [12][13] = 33;
+
+    for( int i = 0; i <14 ; i++){
+        for (int j = 0; j<14 ; j++){
+            if(map[i][j]!=0){
+                map[j][i] = map [i][j];
+            }
+            else{
+                map[i][j] = 999;
+                map[j][i] = 999;
+            }
+        }
+    }
+}
+
+void Dijkstra(int source){ // source is start node 
+    dist[source] = 0;
+    int flag  = 0; //check Q's state (empty or not)
+    int u = source;
+    /*
+     *intializeing for dikstra 
+     */
+    for(int i = 0; i<14; i++){
+        dist[i] = 999;
+    }
+    dist[source] = 0;
+    //main loop 
+    while(!flag){//check Q is empty(flag = 0 is not empty)
+        int count = 0;
+        for ( int i = 0 ; i<14; i++){
+            if (Q[i] == 1)
+                count ++;
+        }
+        if (count == 14){
+            flag = 1;//Q is empty
+            continue;
+        }
+        //check first u
+        //firsttime, source will be selected to u 
+        if ( Q[source] == 0){
+            u = source;
+            Q[u] = 1;
+        }
+        else{ //find the min node in Q set
+            int min = 999;
+            int index;
+            for( int i = 0; i <14; i++){
+                for (int j = 0; j<14 ; j++){
+                    if(map[i][j]<min && Q[i] ==0){
+                        min = map[i][j];
+                        index = i;
+                    }
+                }
+            }
+            u = index;
+            Q[u] = 1; //remove u from set Q
+        }
+        for (int v = 0; v<14; v++){
+            int alt = 0;
+             if(map[u][v] != 999 && Q[v] == 0){
+                alt = dist[u] + map[u][v];
+                if (alt < dist[v]){
+                    dist[v] = alt;
+                    prev[v] = u;
+                }
+            }
+        }
+    }
+}
+
+
+int main(int argc, char * argv[]){
+    init_map();
+    Dijkstra(0); 
+    int end = 13;
+    //find path
+    while(end != 0){ 
+        printf("%d - ", prev[end]);
+        end = prev[end];
+    }
+}
+
+
+
