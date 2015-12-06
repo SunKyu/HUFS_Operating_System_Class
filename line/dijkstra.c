@@ -1,8 +1,7 @@
 #include <stdio.h>
+#include "stack.h"
 
-int dist[14] = {0, };//distance 
 int prev[14]  ={0,};//previous of each node
-int Q[14] = {0, }; //that has the least dist[u] value
 // 0 is unvisited vertex
 // 1 is visited vertex  so 0 is in the set Q
 int map[14][14] = {0,};
@@ -37,18 +36,20 @@ void init_map(){
     }
 }
 
-void Dijkstra(int source){ // source is start node 
+void Dijkstra(int source){ // source is start node
+    int dist[14] = {0, };//distance
     dist[source] = 0;
+    int Q[14] = {0, }; //that has the least dist[u] value
     int flag  = 0; //check Q's state (empty or not)
     int u = source;
     /*
-     *intializeing for dikstra 
+     *intializeing for dikstra
      */
     for(int i = 0; i<14; i++){
         dist[i] = 999;
     }
     dist[source] = 0;
-    //main loop 
+    //main loop
     while(!flag){//check Q is empty(flag = 0 is not empty)
         int count = 0;
         for ( int i = 0 ; i<14; i++){
@@ -60,7 +61,7 @@ void Dijkstra(int source){ // source is start node
             continue;
         }
         //check first u
-        //firsttime, source will be selected to u 
+        //firsttime, source will be selected to u
         if ( Q[source] == 0){
             u = source;
             Q[u] = 1;
@@ -94,14 +95,19 @@ void Dijkstra(int source){ // source is start node
 
 
 int main(int argc, char * argv[]){
+    struct stack s;
+    stack_init(&s);
     init_map();
-    Dijkstra(0); 
+    Dijkstra(0);
     int end = 13;
+    stack_push(&s, end);
     //find path
-    while(end != 0){ 
-        printf("%d - ", prev[end]);
+    while(end != 0){
+        stack_push(&s, prev[end]);
         end = prev[end];
     }
+    stack_push(&s, prev[end]);
+    stack_print(&s);
 }
 
 
