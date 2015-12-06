@@ -70,8 +70,11 @@ int main()
             //left turn angle
             case 0xE0: // 1110 0000
             case 0xF0: // 1111 0000
-                RoboCAR_LeftMotor_Control(BACKWARD, 70);
-                RoboCAR_RightMotor_Control(FORWARD, 80);
+            case 0xF8: // 1111 1000
+                RoboCAR_AllMotor_Control(STOP, 0);
+                usleep(1000*100*15);
+                RoboCAR_Move_Angle(LEFT_ROTATION, 80 ,90);
+                usleep(1000*100*15);
             break;
 
 			//우측으로 후진
@@ -93,8 +96,10 @@ int main()
             //right turn angle
             case 0x07: // 0000 0111
             case 0x0F: // 0000 1111
-                RoboCAR_LeftMotor_Control(FORWARD, 80);
-                RoboCAR_RightMotor_Control(BACKWARD, 70);
+            case 0x1F: // 0001 1111
+                RoboCAR_AllMotor_Control(STOP, 0);
+                usleep(1000*100*15);
+                RoboCAR_Move_Angle(RIGHT_ROTATION, 80, 90);
                 usleep(1000*100*15);
             break;
 
