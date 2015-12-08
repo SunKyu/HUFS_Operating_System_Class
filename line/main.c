@@ -153,7 +153,7 @@ int main()
 			case 0xE7:	// 1110 0111
 			case 0xEF:	// 1110 1111
 			case 0xF7:	// 1111 0111
-				RoboCAR_AllMotor_Control(FORWARD,60);
+				RoboCAR_AllMotor_Control(FORWARD,50);
 			break;
 
 			//좌회전
@@ -202,16 +202,16 @@ int main()
                 next_dir = judgement(stack_top(&st_path), current, &dir);
                 switch(next_dir){
                     case TU_FOWARD:
-				        RoboCAR_AllMotor_Control(FORWARD,60);
+				        RoboCAR_AllMotor_Control(FORWARD,50);
                         break;
                     case TU_RIGHT:
                         usleep(1000*100*15);
-                        RoboCAR_Move_Angle(RIGHT_ROTATION, 80 ,90);
+                        RoboCAR_Move_Angle(RIGHT_ROTATION, 70 ,90);
                         usleep(1000*100*15);
                         break;
                     case TU_LEFT:
                         usleep(1000*100*15);
-                        RoboCAR_Move_Angle(LEFT_ROTATION, 80 ,90);
+                        RoboCAR_Move_Angle(LEFT_ROTATION, 70 ,90);
                         usleep(1000*100*15);
                         break;
                 }
@@ -221,7 +221,7 @@ int main()
 			case 0xFF: //1111 1111
                 RoboCAR_AllMotor_Control(STOP, 0);
                 usleep(1000*100*20);
-                RoboCAR_Move_Angle(RIGHT_ROTATION, 80 ,180);
+                RoboCAR_Move_Angle(RIGHT_ROTATION, 70 ,180);
                 usleep(1000*100*20);
                 st_path = dijkstra_run(current);
                 befo = stack_pop(&st_path);
