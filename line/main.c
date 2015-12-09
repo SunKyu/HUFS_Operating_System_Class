@@ -18,6 +18,12 @@
 #define TU_LEFT 8
 #define TU_UTURN 9
 
+
+int disconnect(int next, int curr){
+    map[curr][next] = 999;
+    map[next][curr] = 999;
+}
+
 int judgement(int next, int curr, int * dir){
     int i = 0;
     switch (*dir){
@@ -106,9 +112,11 @@ int main()
     int dir = UP;
     int next_dir = 0;
     struct stack st_path;
-    st_path = dijkstra_run(0);
+    dijkstra_run(0, 0, &st_path);
     int befo = stack_pop(&st_path);//before node
     int current = befo;//current is node that robot stopped
+    printf("first current : %d\n", current);
+    printf("st_path's top %d, top value %d\n", st_path.top,stack_top(&st_path));
 
 
 
@@ -140,12 +148,13 @@ int main()
 		usleep(10*1000);
 
 		Line_Value= RoboCAR_Get_InfraredRay_Data();
+	    //printf("InfraredRay = 0x%x\n",Line_Value);
 
-		printf("InfraredRay = 0x%x\n",Line_Value);
+		//printf("InfraredRay = 0x%x\n",Line_Value);
 
-		if(tmp_line == Line_Value) continue;
+		//if(tmp_line == Line_Value) continue;
 
-		tmp_line = Line_Value;
+		//tmp_line = Line_Value;
 
 		switch(Line_Value){
 
@@ -169,6 +178,7 @@ int main()
 			case 0xFE: // 1111 1110
 				RoboCAR_LeftMotor_Control(BACKWARD,60);
 				RoboCAR_RightMotor_Control(BACKWARD,40);
+            //    usleep(1000*100*10);
 			break;
 
 			//우회전
@@ -184,47 +194,73 @@ int main()
 			case 0x7F: //0111 1111
 				RoboCAR_LeftMotor_Control(BACKWARD,40);
 				RoboCAR_RightMotor_Control(BACKWARD,60);
+               // usleep(1000*100*10);
 			break;
 
             //left turn angle
+            case 0xC0: // 1100 0000
             case 0xE0: // 1110 0000
             case 0xF0: // 1111 0000
             case 0xF8: // 1111 1000
             //right turn angle
+            case 0x03: // 0000 0011
             case 0x07: // 0000 0111
             case 0x0F: // 0000 1111
             case 0x1F: // 0001 1111
             //cross road
             case 0x00: //0000 0000 cross road
+                usleep(1000*100*2);
                 RoboCAR_AllMotor_Control(STOP, 0);
                 befo = current;
                 current = stack_pop(&st_path);
                 next_dir = judgement(stack_top(&st_path), current, &dir);
+	            printf("**************************\n");
+                printf("path ");
+                stack_print(&st_path);
+                printf("NEXT_DIR : %d, current : %d, next_num : %d\n", next_dir, current, stack_top(&st_path));
+                printf("st_path's top %d, top value %d\n", st_path.top,stack_top(&st_path));
+	        	printf("InfraredRay = 0x%x\n",Line_Value);
+	            printf("**************************\n");
                 switch(next_dir){
                     case TU_FOWARD:
 				        RoboCAR_AllMotor_Control(FORWARD,50);
                         break;
                     case TU_RIGHT:
-                        usleep(1000*100*15);
-                        RoboCAR_Move_Angle(RIGHT_ROTATION, 70 ,90);
-                        usleep(1000*100*15);
+                        usleep(1000*100*10);
+                        RoboCAR_Move_Angle(RIGHT_ROTATION, 80 ,90);
+                        usleep(1000*100*17);
                         break;
                     case TU_LEFT:
-                        usleep(1000*100*15);
-                        RoboCAR_Move_Angle(LEFT_ROTATION, 70 ,90);
-                        usleep(1000*100*15);
+                        usleep(1000*100*10);
+                        RoboCAR_Move_Angle(LEFT_ROTATION, 80 ,90);
+                        usleep(1000*100*17);
                         break;
                 }
 
-            break;
+                break;
 			// 정지
 			case 0xFF: //1111 1111
                 RoboCAR_AllMotor_Control(STOP, 0);
-                usleep(1000*100*20);
-                RoboCAR_Move_Angle(RIGHT_ROTATION, 70 ,180);
-                usleep(1000*100*20);
-                st_path = dijkstra_run(current);
+                RoboCAR_Move_Angle(RIGHT_ROTATION, 90 ,180);
+                printf("==========UTURN==============\n");
+	        	printf("InfraredRay = 0x%x\n",Line_Value);
+                usleep(1000*100*30);
+                if(dir == UP)
+                    dir =DOWN;
+                else if (dir == DOWN)
+                    dir = UP;
+                else if (dir == RIGHT)
+                    dir = LEFT;
+                else if (dir == LEFT)
+                    dir == RIGHT;
+                RoboCAR_AllMotor_Control(STOP, 0);
+                disconnect(stack_top(&st_path), current);
+                printf("map[%d][%d] : %d\n",stack_top(&st_path), current, map[stack_top(&st_path)][current]);
+                dijkstra_run(current, 1, &st_path);
+                printf("==========UTURN==============\n");
                 befo = stack_pop(&st_path);
+                current = befo;
+                usleep(1000*100*25);
                 break;
             break;
 		}// end switch

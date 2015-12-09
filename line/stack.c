@@ -22,16 +22,20 @@ int stack_push (struct stack* s, int new_data){
         printf("Error, stack is full\n");
         return -1;
     }
-    s->arr[(s->top)+1] = new_data;
     s->top +=1;
+    s->arr[(s->top)] = new_data;
 }
 
 int stack_pop (struct stack* s){
+    int a;
     if (stack_is_empty(s) == 1){
         printf("Error, stack is empty\n");
         return -1;
     }
-    return s->arr[(s->top)--];
+    a = s->arr[(s->top)];
+    s->top -=1;
+    return a;
+
 }
 int stack_top (struct stack* s){
     if(stack_is_empty(s) == 1){
@@ -49,7 +53,7 @@ void stack_make_empty(struct stack *s){
 void stack_print(struct stack *s){
     int index = s->top;
     int i = 0;
-    for (i = 0; i<index ; i++){
+    for (i = 0; i<=index ; i++){
         printf("%d - ", s->arr[i]);
     }
 }

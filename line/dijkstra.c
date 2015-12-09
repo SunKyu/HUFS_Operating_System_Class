@@ -93,20 +93,23 @@ void Dijkstra(int source){ // source is start node
     }
 }
 
-struct stack dijkstra_run(int start){
-    struct stack s;
-    stack_init(&s);
-    init_map();
+void dijkstra_run(int start,int flag, struct stack * st){
+    stack_init(st);
+    int i = 0;
+    for( i = 0; i<14; i++)
+        prev[i] = 0;
+    if(flag ==0){
+        init_map();
+    }
     Dijkstra(start);
     int end = 13;
-    stack_push(&s, end);
+    stack_push(st, end);
     //find path
     while(end != 0){
-        stack_push(&s, prev[end]);
+        stack_push(st, prev[end]);
         end = prev[end];
     }
-    stack_push(&s, prev[end]);
-    stack_print(&s);
-    return s;
+    //stack_push(&s, prev[end]);
+    stack_print(st);
 }
 
