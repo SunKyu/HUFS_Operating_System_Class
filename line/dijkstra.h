@@ -11,5 +11,5 @@ int map[14][14];
 void init_map();
 
 void Dijkstra(int source); // source is start node
-struct stack dijkstra_run(int start);
+void dijkstra_run(int start, int flag, struct stack* st);
 #endif

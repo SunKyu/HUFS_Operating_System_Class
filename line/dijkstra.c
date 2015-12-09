@@ -1,8 +1,5 @@
 #include "dijkstra.h"
-//int prev[14]  ={0,};//previous of each node
-// 0 is unvisited vertex
-// 1 is visited vertex  so 0 is in the set Q
-//int map[14][14] = {0,};
+
 void init_map(){
     int i = 0;
     int j = 0;
@@ -28,28 +25,34 @@ void init_map(){
             if(map[i][j]!=0){
                 map[j][i] = map [i][j];
             }
-            else{
-                map[i][j] = 999;
-                map[j][i] = 999;
-            }
+        }
+    }
+    for(  i = 0; i <14 ; i++){
+        for ( j = 0; j<14 ; j++){
+            if(map[i][j] == 0)
+                map[i][j] = 9999;
         }
     }
 }
 
 void Dijkstra(int source){ // source is start node
-    int dist[14] = {0, };//distance
-    dist[source] = 0;
-    int Q[14] = {0, }; //that has the least dist[u] value
+    int dist[14] ;//distance
+    int Q[14];      //that has the least dist[u] value
     int flag  = 0; //check Q's state (empty or not)
     int u = source;
     int i = 0;
     int j = 0;
     int v = 0;
+    for (i = 0; i<14; i++){
+        dist[i] = 0;
+        Q[i] = 0;
+    }
+    //dist[source] = 0;
     /*
      *intializeing for dikstra
      */
     for( i = 0; i<14; i++){
-        dist[i] = 999;
+        dist[i] = 9999;
     }
     dist[source] = 0;
     //main loop
@@ -70,11 +73,11 @@ void Dijkstra(int source){ // source is start node
             Q[u] = 1;
         }
         else{ //find the min node in Q set
-            int min = 999;
+            int min = 9999;
             int index;
             for(  i = 0; i <14; i++){
                 for ( j = 0; j<14 ; j++){
-                    if(map[i][j]<min && Q[i] ==0){
+                    if(map[i][j]<min && Q[i] ==0 && Q[j] == 1){
                         min = map[i][j];
                         index = i;
                     }
@@ -85,7 +88,7 @@ void Dijkstra(int source){ // source is start node
         }
         for ( v = 0; v<14; v++){
             int alt = 0;
-             if(map[u][v] != 999 && Q[v] == 0){
+             if(map[u][v] != 9999 && Q[v] == 0){
                 alt = dist[u] + map[u][v];
                 if (alt < dist[v]){
                     dist[v] = alt;
@@ -96,37 +99,22 @@ void Dijkstra(int source){ // source is start node
     }
 }
 
-struct stack dijkstra_run(int start){
-    struct stack s;
-    stack_init(&s);
-    init_map();
+void dijkstra_run(int start,int flag, struct stack * st){
+    stack_init(st);
+    int i = 0;
+    for( i = 0; i<14; i++)
+        prev[i] = 0;
+    if(flag ==0){
+        init_map();
+    }
     Dijkstra(start);
     int end = 13;
-    stack_push(&s, end);
+    stack_push(st, end);
     //find path
     while(end != 0){
-        stack_push(&s, prev[end]);
+        stack_push(st, prev[end]);
         end = prev[end];
     }
-    stack_push(&s, prev[end]);
-    stack_print(&s);
-    return s;
+    stack_print(st);
 }
 
-/*
-int main(int argc, char * argv[]){
-    struct stack s;
-    stack_init(&s);
-    init_map();
-    Dijkstra(0);
-    int end = 13;
-    stack_push(&s, end);
-    //find path
-    while(end != 0){
-        stack_push(&s, prev[end]);
-        end = prev[end];
-    }
-    stack_push(&s, prev[end]);
-    stack_print(&s);
-}
-*/
