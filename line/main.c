@@ -169,6 +169,7 @@ int main()
 			case 0xF3: //1111 0011
 			case 0xFB: //1111 1011
 			case 0xF9: //1111 1001
+            //case 0xF8: // 1111 1000
 				RoboCAR_LeftMotor_Control(FORWARD,40);
 				RoboCAR_RightMotor_Control(FORWARD,60);
 			break;
@@ -185,6 +186,7 @@ int main()
 			case 0xCF: // 1100 1111
 			case 0xDF: // 1101 1111
 			case 0x9F: // 1001 1111
+            //case 0x1F: // 0001 1111
 				RoboCAR_LeftMotor_Control(FORWARD,60);
 				RoboCAR_RightMotor_Control(FORWARD,40);
 			break;
@@ -233,7 +235,7 @@ int main()
                     case TU_LEFT:
                         usleep(1000*100*10);
                         RoboCAR_Move_Angle(LEFT_ROTATION, 80 ,90);
-                        usleep(1000*100*17);
+                        usleep(1000*100*16);
                         break;
                 }
 
@@ -244,7 +246,7 @@ int main()
                 RoboCAR_Move_Angle(RIGHT_ROTATION, 90 ,180);
                 printf("==========UTURN==============\n");
 	        	printf("InfraredRay = 0x%x\n",Line_Value);
-                usleep(1000*100*30);
+                usleep(1000*100*26);
                 if(dir == UP)
                     dir =DOWN;
                 else if (dir == DOWN)
