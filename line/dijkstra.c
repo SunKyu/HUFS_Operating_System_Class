@@ -115,7 +115,6 @@ void dijkstra_run(int start,int flag, struct stack * st){
         stack_push(st, prev[end]);
         end = prev[end];
     }
-    //stack_push(&s, prev[end]);
     stack_print(st);
 }
 

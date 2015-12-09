@@ -101,8 +101,6 @@ int judgement(int next, int curr, int * dir){
             }
             break;
     }
-
-
 }
 
 
@@ -148,13 +146,6 @@ int main()
 		usleep(10*1000);
 
 		Line_Value= RoboCAR_Get_InfraredRay_Data();
-	    //printf("InfraredRay = 0x%x\n",Line_Value);
-
-		//printf("InfraredRay = 0x%x\n",Line_Value);
-
-		//if(tmp_line == Line_Value) continue;
-
-		//tmp_line = Line_Value;
 
 		switch(Line_Value){
 
@@ -169,50 +160,35 @@ int main()
 			case 0xF3: //1111 0011
 			case 0xFB: //1111 1011
 			case 0xF9: //1111 1001
-            //case 0xF8: // 1111 1000
-				RoboCAR_LeftMotor_Control(FORWARD,40);
-				RoboCAR_RightMotor_Control(FORWARD,60);
-			break;
-			//우측으로 후진
 			case 0xFC: // 1111 1100
 			case 0xFD: // 1111 1101
 			case 0xFE: // 1111 1110
-				RoboCAR_LeftMotor_Control(BACKWARD,60);
-				RoboCAR_RightMotor_Control(BACKWARD,40);
-            //    usleep(1000*100*10);
+				RoboCAR_LeftMotor_Control(FORWARD,10);
+				RoboCAR_RightMotor_Control(FORWARD,90);
 			break;
 
 			//우회전
 			case 0xCF: // 1100 1111
 			case 0xDF: // 1101 1111
 			case 0x9F: // 1001 1111
-            //case 0x1F: // 0001 1111
-				RoboCAR_LeftMotor_Control(FORWARD,60);
-				RoboCAR_RightMotor_Control(FORWARD,40);
-			break;
-			//좌측으로 후진
 			case 0x3F: //0011 1111
 			case 0xBF: //1011 1111
 			case 0x7F: //0111 1111
-				RoboCAR_LeftMotor_Control(BACKWARD,40);
-				RoboCAR_RightMotor_Control(BACKWARD,60);
-               // usleep(1000*100*10);
+				RoboCAR_LeftMotor_Control(FORWARD,90);
+				RoboCAR_RightMotor_Control(FORWARD,10);
 			break;
 
             //left turn angle
             case 0xC0: // 1100 0000
             case 0xE0: // 1110 0000
             case 0xF0: // 1111 0000
-            case 0xF8: // 1111 1000
             //right turn angle
             case 0x03: // 0000 0011
             case 0x07: // 0000 0111
             case 0x0F: // 0000 1111
-            case 0x1F: // 0001 1111
             //cross road
             case 0x00: //0000 0000 cross road
-                usleep(1000*100*2);
-                RoboCAR_AllMotor_Control(STOP, 0);
+                usleep(1000*10*15);
                 befo = current;
                 current = stack_pop(&st_path);
                 next_dir = judgement(stack_top(&st_path), current, &dir);
@@ -228,21 +204,18 @@ int main()
 				        RoboCAR_AllMotor_Control(FORWARD,50);
                         break;
                     case TU_RIGHT:
-                        usleep(1000*100*10);
                         RoboCAR_Move_Angle(RIGHT_ROTATION, 80 ,90);
-                        usleep(1000*100*17);
+                        usleep(1000*100*18);
                         break;
                     case TU_LEFT:
-                        usleep(1000*100*10);
                         RoboCAR_Move_Angle(LEFT_ROTATION, 80 ,90);
-                        usleep(1000*100*16);
+                        usleep(1000*100*18);
                         break;
                 }
-
+ //               center(Line_Value);
                 break;
 			// 정지
 			case 0xFF: //1111 1111
-                RoboCAR_AllMotor_Control(STOP, 0);
                 RoboCAR_Move_Angle(RIGHT_ROTATION, 90 ,180);
                 printf("==========UTURN==============\n");
 	        	printf("InfraredRay = 0x%x\n",Line_Value);
@@ -254,7 +227,7 @@ int main()
                 else if (dir == RIGHT)
                     dir = LEFT;
                 else if (dir == LEFT)
-                    dir == RIGHT;
+                    dir = RIGHT;
                 RoboCAR_AllMotor_Control(STOP, 0);
                 disconnect(stack_top(&st_path), current);
                 printf("map[%d][%d] : %d\n",stack_top(&st_path), current, map[stack_top(&st_path)][current]);
@@ -262,9 +235,10 @@ int main()
                 printf("==========UTURN==============\n");
                 befo = stack_pop(&st_path);
                 current = befo;
-                usleep(1000*100*25);
                 break;
-            break;
+            default:
+                RoboCAR_AllMotor_Control(FORWARD, 50);
+                break;
 		}// end switch
 	}//end while
 

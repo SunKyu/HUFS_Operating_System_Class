@@ -31,7 +31,7 @@ void node_init(){
     node_arr[4].dir[3] = 0;
 
     node_arr[5].dir[0] = 0;
-    node_arr[5].dir[1] = 0;
+    node_arr[5].dir[1] = 2;
     node_arr[5].dir[2] = 6;
     node_arr[5].dir[3] = 0;
 
